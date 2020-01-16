@@ -2,9 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const cp = require('child_process')
 const which = require('which')
-// import WinReg, { Registry } from "winreg";
-const regSync= require('./regSync')
-const execSync = require('child_process')
+const winRegSync = require('winRegSync')
 
 //windows
 const isWindows = process.platform.indexOf('win') === 0
@@ -12,11 +10,10 @@ const jdkRegistryKeyPaths = ["\\SOFTWARE\\JavaSoft\\JDK","\\SOFTWARE\\JavaSoft\\
 const jreRegistryKeyPaths = ["\\SOFTWARE\\JavaSoft\\Java Runtime Environment"];
 function checkWindows(allowJre) {
     const possibleKeyPaths = allowJre ? jdkRegistryKeyPaths.concat(jreRegistryKeyPaths) : jdkRegistryKeyPaths;
-    const {get, keys, HKLM} = regSync
 
     for(const path of possibleKeyPaths) {
-        for (const regPath of keys(HKLM, path)) {
-            const javaHome = get(regPath, 'JavaHome')
+        for (const regPath of winRegSync.paths(winRegSync.HKLM, path)) {
+            const javaHome = winRegSync.getKey(regPath, 'JavaHome')
 
             if (javaHome) return javaHome.value;
         } 
