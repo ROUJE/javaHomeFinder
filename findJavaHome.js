@@ -2,24 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const cp = require('child_process')
 const which = require('which')
-const winRegSync = require('winRegSync')
-
-//windows
-const isWindows = process.platform.indexOf('win') === 0
-const jdkRegistryKeyPaths = ["\\SOFTWARE\\JavaSoft\\JDK","\\SOFTWARE\\JavaSoft\\Java Development Kit"];
-const jreRegistryKeyPaths = ["\\SOFTWARE\\JavaSoft\\Java Runtime Environment"];
-function checkWindows(allowJre) {
-    const possibleKeyPaths = allowJre ? jdkRegistryKeyPaths.concat(jreRegistryKeyPaths) : jdkRegistryKeyPaths;
-
-    for(const path of possibleKeyPaths) {
-        for (const regPath of winRegSync.paths(winRegSync.HKLM, path)) {
-            const javaHome = winRegSync.getKey(regPath, 'JavaHome')
-
-            if (javaHome) return javaHome.value;
-        } 
-    }
-    return false
-}
 
 //env variables (mac & linux)
 function checkJavaRuntime(JAVA_FILENAME) {
@@ -30,14 +12,12 @@ function checkJavaRuntime(JAVA_FILENAME) {
 }
 
 
-function findJavaHome({allowJre}) {
-    const JAVA_FILENAME = (allowJre ? 'java' : 'javac') + (isWindows ? '.exe' : '');    
+function findJavaHome() {
+    const JAVA_FILENAME = 'javac'
     const jHome = [
-        // From registry (windows only)
-        isWindows && checkWindows(allowJre),
-        !isWindows && checkJavaRuntime(JAVA_FILENAME),
-        !isWindows && checkMac(JAVA_FILENAME),
-        !isWindows && checkLinux(JAVA_FILENAME)
+        checkJavaRuntime(JAVA_FILENAME),
+        checkMac(JAVA_FILENAME),
+        checkLinux(JAVA_FILENAME)
     ].filter(home => !!home) 
     
     return jHome.length ? jHome[0] : false 

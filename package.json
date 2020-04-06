@@ -1,13 +1,13 @@
 {
-  "name": "javahomefinder",
-  "version": "1.0.1",
-  "description": "This package finds Java home in Windows, Mac or Linux synchronously",
+  "name": "jdkfinder",
+  "version": "1.0.0",
+  "description": "This package finds Java home in Mac or Linux synchronously",
   "main": "findJavaHome.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ROUJE/javaHomeFinder.git"
   },
-  "keywords": ["findJavaHome","find","java","home","finder","findJavaHome windows","findJavaHome linux","findJavaHome ma"],
+  "keywords": ["findJavaHome","find","java","home","finder","findJavaHome linux","findJavaHome ma"],
   "author": "Marin Bivol & Neil Lapuz",
   "license": "ISC",
   "bugs": {
